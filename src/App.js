@@ -1,31 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, Pagination, Row, Col, Statistic, Header } from 'antd';
+import { Table, Pagination, Row, Col, Statistic } from 'antd';
 import { getCars, getDealer } from './actions';
-
-const columns = [
-  {
-    title: 'brand',
-    dataIndex: 'brand',
-    key: 'brand',
-  },
-  {
-    title: 'model',
-    dataIndex: 'model',
-    key: 'model',
-  },
-  {
-    title: 'vin',
-    dataIndex: 'vin',
-    key: 'vin'
-  },
-  ,
-  {
-    title: 'dealer',
-    dataIndex: 'dealer',
-    key: 'dealer'
-  }
-];
 
 class App extends Component {
   constructor(props) {
@@ -67,7 +43,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props.dealers);
     return (
       <div className='main-container'>
         <Row>
@@ -86,7 +61,25 @@ class App extends Component {
               pagination={false}
               bordered={true}
               dataSource={this.props.cars}
-              columns={columns} />} {/* TODO make it simple */}
+            >
+              <Table.Column title="brand" dataIndex="brand" key="brand" />
+              <Table.Column title="model" dataIndex="model" key="model" />
+              <Table.Column title="vin" dataIndex="vin" key="vin" />
+              <Table.Column
+                title="dealer"
+                dataIndex="dealer"
+                key="dealer"
+                render={dealer => {
+                  let result = this.props.dealers.filter(dealer_ => {
+                    if (dealer_.id === dealer) return dealer_;
+                  });
+                  if (result.get(0))
+                    return <div>{result.get(0).name}</div>;
+                  else
+                    return <div>Loading...</div>;
+                }}
+              />
+            </Table>} {/* TODO make it simple */}
           </Col>
         </Row>
         <Row type="flex" justify="space-between">
