@@ -21,15 +21,9 @@ const columns = [
   },
   ,
   {
-    title: 'dealer.id',
-    dataIndex: 'dealer.id',
-    key: 'dealer.id'
-  },
-  ,
-  {
-    title: 'dealer.name',
-    dataIndex: 'dealer.name',
-    key: 'dealer.name'
+    title: 'dealer',
+    dataIndex: 'dealer',
+    key: 'dealer'
   }
 ];
 
@@ -73,6 +67,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.props.dealers);
     return (
       <div className='main-container'>
         <Row>
@@ -80,12 +75,12 @@ class App extends Component {
             {Array.isArray(this.props.cars) && <Table
               expandedRowRender={car => {
                 let result = this.props.dealers.filter(dealer => {
-                  if (dealer.id === car.dealer.id) return dealer;
+                  if (dealer.id === car.dealer) return dealer;
                 });
                 if (result.get(0))
                   return this.getDealer(result.get(0));
               }}
-              onExpand={(expanded, car) => this.props.getDealer(car.dealer.id)}
+              onExpand={(expanded, car) => this.props.getDealer(car.dealer)}
               expandRowByClick={true}
               loading={this.props.loading}
               pagination={false}
