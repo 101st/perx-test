@@ -1,0 +1,3 @@
+export const GET_CARS_SUCCESS = 'GET_CARS_SUCCESS';
+export const GET_DEALER_SUCCESS = 'GET_DEALER_SUCCESS';
+export const LOADING = 'LOADING';
