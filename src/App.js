@@ -1,40 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, Pagination, Row, Col, Statistic } from 'antd';
+import { Table, Pagination, Row, Col, Icon } from 'antd';
 import { getCars, getDealer } from './actions';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.getDealer = this.getDealer.bind(this);
     this.state = {
       page: 1,
       per_page: 10
     }
-  }
-
-  getDealer(dealer) { //move to another component
-    return [
-      <Row key='Main' gutter={16}>
-        <Col span={8}>
-          <Statistic title="Name" value={dealer.name} valueStyle={{ fontSize: '1em' }} />
-        </Col>
-        <Col span={8}>
-          <Statistic title="Title" value={dealer.title} valueStyle={{ fontSize: '1em' }} />
-        </Col>
-        <Col span={8}>
-          <Statistic title="URL" value={dealer.url} valueStyle={{ fontSize: '1em' }} />
-        </Col>
-      </Row>,
-      <Row key='Offices'>
-        <h3>Offices</h3>
-        {dealer.offices.map(office => {
-          return <div key={office.id}>
-            <p>{office.address},{office.phone}</p>
-          </div>
-        })}
-      </Row>
-    ]
   }
 
   componentDidMount() {
@@ -48,15 +23,6 @@ class App extends Component {
         <Row>
           <Col>
             {Array.isArray(this.props.cars) && <Table
-              expandedRowRender={car => {
-                let result = this.props.dealers.filter(dealer => {
-                  if (dealer.id === car.dealer) return dealer;
-                });
-                if (result.get(0))
-                  return this.getDealer(result.get(0));
-              }}
-              onExpand={(expanded, car) => this.props.getDealer(car.dealer)}
-              expandRowByClick={true}
               loading={this.props.loading}
               pagination={false}
               bordered={true}
@@ -76,7 +42,7 @@ class App extends Component {
                   if (result.get(0))
                     return <div>{result.get(0).name}</div>;
                   else
-                    return <div>Loading...</div>;
+                    return <Icon type="loading" />;
                 }}
               />
             </Table>} {/* TODO make it simple */}
@@ -85,6 +51,7 @@ class App extends Component {
         <Row type="flex" justify="space-between">
           <Col>
             <Pagination
+              simple
               onChange={this.props.getCars}
               style={{ marginTop: '20px' }}
               pageSize={this.state.per_page}
@@ -109,7 +76,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getCars: (page, per_page) => dispatch(getCars(page, per_page)),
+    getCars: (page, per_page) => dispatch(getCars(page, per_page, getDealer)),
     getDealer: id => dispatch(getDealer(id))
   }
 };

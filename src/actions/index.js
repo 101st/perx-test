@@ -2,11 +2,13 @@ import * as api from '../apis/api';
 
 export const getCars = (page, per_page) => async dispatch => {
   try {
-
     dispatch({ type: 'LOADING', status: true });
 
     let payload = await api.getCars(page, per_page);
-    payload.data = payload.data.map(car => Object.assign(car, { key: car.vin }));
+    payload.data = payload.data.map(car => {
+      dispatch(getDealer(car.dealer));
+      return Object.assign(car, { key: car.vin });
+    });
     dispatch({ type: 'GET_CARS_SUCCESS', payload });
 
     dispatch({ type: 'LOADING', status: false });
