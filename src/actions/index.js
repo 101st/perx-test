@@ -5,8 +5,12 @@ export const getCars = (page, per_page) => async dispatch => {
     dispatch({ type: 'LOADING', status: true });
 
     let payload = await api.getCars(page, per_page);
+    var tempArray = [];
     payload.data = payload.data.map(car => {
-      dispatch(getDealer(car.dealer));
+      if (tempArray.indexOf(car.dealer) === -1) {
+        dispatch(getDealer(car.dealer));
+        tempArray.push(car.dealer);
+      }
       return Object.assign(car, { key: car.vin });
     });
     dispatch({ type: 'GET_CARS_SUCCESS', payload });
@@ -24,9 +28,7 @@ export const getDealer = (id) => async (dispatch, getState) => { //TODO
     let dealer = dealers.find(dealer => dealer.id === id);
     dispatch({ type: 'LOADING', status: true });
 
-    if (dealer)
-      dispatch({ type: 'GET_DEALER_SUCCESS' });
-    else {
+    if (!dealer) {
       let payload = await api.getDealer(id);
       dispatch({ type: 'GET_DEALER_SUCCESS', payload: payload.data });
     }
