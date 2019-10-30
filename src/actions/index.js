@@ -16,7 +16,7 @@ export const getCars = (page, per_page) => async dispatch => {
   }
 }
 
-export const getDealer = (id) => async (dispatch, getState) => {
+export const getDealer = (id) => async (dispatch, getState) => { //TODO
   try {
     const dealers = getState().reducer.get('dealers');
     let dealer = dealers.find(dealer => dealer.id === id);

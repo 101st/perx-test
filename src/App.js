@@ -43,7 +43,7 @@ class App extends Component {
     }
   }
 
-  getDealer(dealer) {
+  getDealer(dealer) { //move to another component
     return [
       <Row key='Main' gutter={16}>
         <Col span={8}>
@@ -79,8 +79,11 @@ class App extends Component {
           <Col>
             {Array.isArray(this.props.cars) && <Table
               expandedRowRender={car => {
-                let result = this.props.dealers.filter(dealer => { if (dealer.id === car.dealer.id) return dealer });
-                if (result.get(0)) return this.getDealer(result.get(0));
+                let result = this.props.dealers.filter(dealer => {
+                  if (dealer.id === car.dealer.id) return dealer;
+                });
+                if (result.get(0))
+                  return this.getDealer(result.get(0));
               }}
               onExpand={(expanded, car) => this.props.getDealer(car.dealer.id)}
               expandRowByClick={true}
@@ -88,7 +91,7 @@ class App extends Component {
               pagination={false}
               bordered={true}
               dataSource={this.props.cars}
-              columns={columns} />} {/* TODO */}
+              columns={columns} />} {/* TODO make it simple */}
           </Col>
         </Row>
         <Row type="flex" justify="space-between">
